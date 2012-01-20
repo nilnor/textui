@@ -40,7 +40,6 @@ local M = {
   buffer = require 'textui.buffer',
   style = require 'textui.style',
   list = require 'textui.list',
-  style_list = require 'textui.style_list'
 }
 
 _M.textui = M
