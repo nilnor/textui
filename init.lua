@@ -42,5 +42,4 @@ local M = {
   list = require 'textui.list',
 }
 
-_M.textui = M
 return M
