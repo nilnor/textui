@@ -18,12 +18,12 @@ How to use
 ----------
 
 After installing the TextUI module into your `modules` directory, you can either
+do
 
-    require 'textui'
+    _M.textui = require 'textui'
 
-which will automatically require and place all the textui modules under the
-_M.textui namespace. You can also optionally require just the modules that you
-want by something similar to
+to require and place all the textui modules under the M.textui namespace. You can
+also optionally require just the modules that you want by something similar to
 
     local style = require 'textui.style'
     local buffer = require 'textui.style'
