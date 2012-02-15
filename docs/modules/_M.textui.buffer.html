@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>TextUI docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>TextUI</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#Instance_fields">Instance fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/_M.textui.html">_M.textui</a></li>
+  <li><strong>_M.textui.buffer</strong></li>
+  <li><a href="../modules/_M.textui.list.html">_M.textui.list</a></li>
+  <li><a href="../modules/_M.textui.style.html">_M.textui.style</a></li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
+  <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
+  <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
+  <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
+  <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
+  <li><a href="../examples/styled_list.lua.html">styled_list.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>_M.textui.buffer</code></h1>
+
+<p>The buffer class wraps a TextAdept buffer, and extends it with support for
+custom styling, buffer specific key bindings and hotspot support.</p>
+<p> It takes
+care of the details needed for making a text based interface work, such as
+mapping TextAdept events to the correct buffers, working with the <a href="../modules/_M.textui.style.html#">_M.textui.style</a>
+module to ensure that styling works, etc.</p>
+
+<h2>How it works</h2>
+
+<p>When you work with a TextUI buffer, it will nearly always seem just like an ordinary
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html">TextAdept buffer</a>
+(but with benefits, such as support for custom styling and easy callbacks, etc.).
+But where an TextAdept buffer is volatile, and might cease to exists at any
+time (due to it being closed by a user for example) a TextUI buffer is persistent.</p>
+
+<p>When we say that a TextUI buffer "wraps" an TextAdept buffer, there's more to it
+than just adding additional methods to the TextAdept buffer class. A TextUI
+buffer will always exist, but the corresponding TextAdept buffer, named <code>target</code>
+hereafter, may not. When the target buffer exists, a TextUI buffer will
+expose all the functions and attributes of the TextAdept buffer, making it
+possible to use the TextUI buffer in just the same way as you would a TextAdept
+buffer (i.e. invoking any of the ordinary buffer methods, setting attributes,
+etc.). The TextUI buffer takes care of creating the target buffer automatically
+if needed whenever you invoke <a href="../modules/_M.textui.buffer.html#buffer:show">buffer:show</a>. When the target buffer does not
+exist, for instance as the result of the user closing it, any attempt to invoke
+any of the ordinary buffer methods will raise an error. You can check explicitly
+whether the target exists by using the <a href="../modules/_M.textui.buffer.html#buffer:is_attached">buffer:is_attached</a> function. This is
+not however something you will have to worry much about in practice, since you'll
+typically interact with the buffer as part of a refresh, key press, etc., where
+the target buffer will always exist.</p>
+
+<p>In short, you don't have to worry about creating buffers, detecting whether the
+buffer was closed, etc., as long as you remember to invoke <a href="../modules/_M.textui.buffer.html#buffer:show">buffer:show</a> and
+perform your work within the callbacks.</p>
+
+<h2>How to use</h2>
+
+<p>You create a new TextUI buffer by calling <a href="../modules/_M.textui.buffer.html#new">new</a>, passing the buffer
+title. You specify an <a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler for the buffer, which is responsible
+for actually inserting the content in the buffer, along with any custom styles
+and hotspot handlers. You specify any custom key bindings using either <a href="../modules/_M.textui.buffer.html#keys">keys</a>
+or <a href="../modules/_M.textui.buffer.html#on_keypress">on_keypress</a>, and/or hook any other handlers of interest. In the
+<a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler, you add the actual text using any of the extended
+text insertion functions (<a href="../modules/_M.textui.buffer.html#buffer:add_text">buffer:add_text</a>, <a href="../modules/_M.textui.buffer.html#buffer:append_text">buffer:append_text</a>,
+<a href="../modules/_M.textui.buffer.html#buffer:insert_text">buffer:insert_text</a> or possibly <a href="../modules/_M.textui.buffer.html#buffer:newline">buffer:newline</a>). You invoke
+<a href="../modules/_M.textui.buffer.html#buffer:show">buffer:show</a> to show the buffer, and respond to any interactions using the
+provided callbacks.</p>
+
+<p>Please see the examples for more hands on instructions.</p>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new&nbsp;(title)</a></td>
+	<td class="summary">Creates and returns a new textui buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:show">buffer:show&nbsp;()</a></td>
+	<td class="summary">Shows the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:close">buffer:close&nbsp;()</a></td>
+	<td class="summary">Closes the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:refresh">buffer:refresh&nbsp;()</a></td>
+	<td class="summary">Refreshes the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:set_title">buffer:set_title&nbsp;(title)</a></td>
+	<td class="summary">Updates the title of the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:is_attached">buffer:is_attached&nbsp;()</a></td>
+	<td class="summary">Checks whether a target buffer currently exists.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:is_showing">buffer:is_showing&nbsp;()</a></td>
+	<td class="summary">Checks whether the buffer is currently showing in any view.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:is_active">buffer:is_active&nbsp;()</a></td>
+	<td class="summary">Checks whether the buffer is currently active, i.e.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:add_hotspot">buffer:add_hotspot&nbsp;(start_pos, end_pos, command)</a></td>
+	<td class="summary">Adds a hotspot for the given text range.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:add_text">buffer:add_text&nbsp;(text, style, command)</a></td>
+	<td class="summary">Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.add_text">buffer:add_text</a>
+which accepts optional style and command parameters.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:append_text">buffer:append_text&nbsp;(text, style, command)</a></td>
+	<td class="summary">Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.append_text">buffer:append_text</a>
+which accepts optional style and command parameters.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:insert_text">buffer:insert_text&nbsp;(pos, text, style, command)</a></td>
+	<td class="summary">Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.insert_text">buffer:insert_text</a>
+which accepts optional style and command parameters.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buffer:newline">buffer:newline&nbsp;()</a></td>
+	<td class="summary">Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.new_line">buffer:new_line</a>.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#read_only">read_only</a></td>
+	<td class="summary">Whether the buffer should be marked as read only.</td>
+	</tr>
+</table>
+<h2><a href="#Instance_fields">Instance fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#on_deleted">on_deleted</a></td>
+	<td class="summary">Callback invoked whenever the target buffer is deleted.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_refresh">on_refresh</a></td>
+	<td class="summary">Callback invoked whenever the buffer should refresh.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_keypress">on_keypress</a></td>
+	<td class="summary">Callback invoked whenever the buffer receives a keypress.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#keys">keys</a></td>
+	<td class="summary">A table of key commands for the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#data">data</a></td>
+	<td class="summary">A general purpose table that can be used for storing state associated
+ with the buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#target">target</a></td>
+	<td class="summary">The target buffer, if any.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new&nbsp;(title)</strong>
+    </dt>
+    <dd>
+    Creates and returns a new textui buffer.  The buffer will not be attached
+ upon the return.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>title</em></code>:  The title of the buffer. This will be displayed as the buffer's
+ title in the TextAdept top bar.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:show"></a>
+    <strong>buffer:show&nbsp;()</strong>
+    </dt>
+    <dd>
+    Shows the buffer.  If the target buffer doesn't exist, due to
+ it either not having been created yet or it having been deleted,
+ it is automatically created. Upon the return, the buffer is showing
+ and set as the global buffer.
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:close"></a>
+    <strong>buffer:close&nbsp;()</strong>
+    </dt>
+    <dd>
+    Closes the buffer. 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:refresh"></a>
+    <strong>buffer:refresh&nbsp;()</strong>
+    </dt>
+    <dd>
+    Refreshes the buffer.  A refresh works by ensuring that it's
+ possible to write to the buffer and invoking the <a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler.
+ After the refresh is complete, the <a href="../modules/_M.textui.buffer.html#read_only">read_only</a> state is reset to
+ whatever it was before the refresh, and a save point is set.
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:set_title"></a>
+    <strong>buffer:set_title&nbsp;(title)</strong>
+    </dt>
+    <dd>
+    Updates the title of the buffer. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>title</em></code>: 
+
+</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:is_attached"></a>
+    <strong>buffer:is_attached&nbsp;()</strong>
+    </dt>
+    <dd>
+    Checks whether a target buffer currently exists. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        true if the target buffer exists and false otherwise
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "buffer:is_showing"></a>
+    <strong>buffer:is_showing&nbsp;()</strong>
+    </dt>
+    <dd>
+    Checks whether the buffer is currently showing in any view. 
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        true if the buffer is showing and false otherwise
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "buffer:is_active"></a>
+    <strong>buffer:is_active&nbsp;()</strong>
+    </dt>
+    <dd>
+    Checks whether the buffer is currently active, i.e.  the current buffer.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        true if the buffer is active and false otherwise
+    </ol>
+
+
+</dd>
+    <dt>
+    <a name = "buffer:add_hotspot"></a>
+    <strong>buffer:add_hotspot&nbsp;(start_pos, end_pos, command)</strong>
+    </dt>
+    <dd>
+    Adds a hotspot for the given text range. 
+Hotspots allows you to specify the behaviour for when the user selects
+certain text. Besides using this function directly, it's also possible and
+in many cases more convinient to add an hotspot when using any of the text
+insertion functions (<a href="../modules/_M.textui.buffer.html#buffer:add_text">buffer:add_text</a>, <a href="../modules/_M.textui.buffer.html#buffer:append_text">buffer:append_text</a>,
+<a href="../modules/_M.textui.buffer.html#buffer:insert_text">buffer:insert_text</a>). Note that the range given is interpreted as being
+half closed, i.e. <code>[start_pos, end_pos)</code>.</p>
+
+<p><em>NB</em>: Please note that all hotspots are cleared as part of a refresh.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>start_pos</em></code>:  The start position</li>
+       <li><code><em>end_pos</em></code>:  The end position. The end position itself is not part of the
+hotspot.</li>
+       <li><code><em>command</em></code>: 
+<p> The command to execute. Similarily to <a href="../modules/_M.textui.buffer.html#keys">keys</a>, command can be
+either a function or a table. When the command is a function, it will be passed
+the following parameters:</p>
+
+<ul>
+    <li>buffer: The buffer instance</li>
+    <li>shift: True if the Shift key was held down.</li>
+    <li>ctrl: True if the Control/Command key was held down.</li>
+    <li>alt: True if the Alt/option key was held down.</li>
+    <li>meta: True if the Control key on Mac OSX was held down.</li>
+</ul>
+</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:add_text"></a>
+    <strong>buffer:add_text&nbsp;(text, style, command)</strong>
+    </dt>
+    <dd>
+    Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.add_text">buffer:add_text</a>
+which accepts optional style and command parameters. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>text</em></code>:  The text to add.</li>
+       <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
+       <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
+<a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:append_text"></a>
+    <strong>buffer:append_text&nbsp;(text, style, command)</strong>
+    </dt>
+    <dd>
+    Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.append_text">buffer:append_text</a>
+which accepts optional style and command parameters. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>text</em></code>:  The text to append.</li>
+       <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
+       <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
+<a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:insert_text"></a>
+    <strong>buffer:insert_text&nbsp;(pos, text, style, command)</strong>
+    </dt>
+    <dd>
+    Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.insert_text">buffer:insert_text</a>
+which accepts optional style and command parameters. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>pos</em></code>:  The position to insert text at or <code>-1</code> for the current position.</li>
+       <li><code><em>text</em></code>:  The text to insert.</li>
+       <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
+       <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
+<a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buffer:newline"></a>
+    <strong>buffer:newline&nbsp;()</strong>
+    </dt>
+    <dd>
+    Override for
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.new_line">buffer:new_line</a>. 
+A TextUI buffer will always have eol mode set to LF, so it's also possible,
+and arguably easier, to just insert a newline using the <code>\n</code> escape via any
+of the other text insertion functions.
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Fields"></a>Fields</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "read_only"></a>
+    <strong>read_only</strong>
+    </dt>
+    <dd>
+    Whether the buffer should be marked as read only. 
+The default is true but can be changed on a buffer to buffer basis. Any call to
+<a href="../modules/_M.textui.buffer.html#buffer:refresh">buffer:refresh</a> will automatically take care of setting the buffer to write
+mode before invoking the <a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler, and will restore the <a href="../modules/_M.textui.buffer.html#read_only">read_only</a>
+state afterwards.
+
+
+
+
+
+</dd>
+</dl>
+    <h2><a name="Instance_fields"></a>Instance fields</h2>
+     These can be set only for an buffer instance, and not
+ globally for the module.
+    <dl class="function">
+    <dt>
+    <a name = "on_deleted"></a>
+    <strong>on_deleted</strong>
+    </dt>
+    <dd>
+    Callback invoked whenever the target buffer is deleted. 
+ The callback has the following with the following parameters: <code>buffer</code>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_refresh"></a>
+    <strong>on_refresh</strong>
+    </dt>
+    <dd>
+    Callback invoked whenever the buffer should refresh. 
+This should set for each buffer. It is this callback that is responsible
+for actually inserting any content into the buffer. Before this callback
+is invoked, any previous buffer content will be cleared.
+The callback will be invoked with the buffer as the sole parameter.
+
+
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/_M.textui.buffer.html#buffer:refresh">buffer:refresh</a>
+    </ul>
+</dd>
+    <dt>
+    <a name = "on_keypress"></a>
+    <strong>on_keypress</strong>
+    </dt>
+    <dd>
+    Callback invoked whenever the buffer receives a keypress. 
+Please note that if there is any key command defined in <a href="../modules/_M.textui.buffer.html#keys">keys</a> matching
+the keypress, that key command will be invoked and this callback will never
+be called. The callback will receive as its first two parameters the buffer
+object and the "translated key" (same format as for <a href="../modules/_M.textui.buffer.html#keys">keys</a>), and will in
+addition after that receive all the parameters from the the standard TextAdept
+KEYPRESS event (which you can read more about
+<a href="http://caladbolg.net/luadoc/textadept/modules/events.html">here</a>).
+The return value determines whether the key press should be propagated, just
+the same as for the standard TextAdept event.
+
+
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/_M.textui.buffer.html#keys">keys</a>
+    </ul>
+</dd>
+    <dt>
+    <a name = "keys"></a>
+    <strong>keys</strong>
+    </dt>
+    <dd>
+    A table of key commands for the buffer. 
+This is similar to <code>_M.textadept.keys</code> works, but allows you to specify key
+commands specifically for one buffer. The format for specifying keys
+is the same as for
+<a href="http://caladbolg.net/luadoc/textadept/modules/keys.html">_M.textadept.keys</a>,
+and the values assigned can also be either functions or tables.
+There are differences compared to <code>_M.textadept.keys</code> however:</p>
+
+<ul>
+    <li>It's not possible to specify language specific key bindings. This is
+    obviously not applicable for a textui buffer.</li>
+    <li>It's not possible to specify keychain sequences.</li>
+    <li>For function values, the buffer instance is passed as the first argument.</li>
+    <li>For table values, buffer or view references will not be magically fixed.
+    This means that you should not use either of the above in a table command,
+    unless you enjoy the occasional segfault.</li>
+</ul>
+
+<p>In short, only explicit simple mappings are supported. Defining a key command
+for a certain key means that key presses are never propagated any further for
+that particular key. Key commands take preference over any <a href="../modules/_M.textui.buffer.html#on_keypress">on_keypress</a>
+callback, so any such callback will never be called if a key command matches.
+
+
+
+
+
+    <h3>see also:</h3>
+    <ul>
+         <a href="../modules/_M.textui.buffer.html#on_keypress">on_keypress</a>
+    </ul>
+</dd>
+    <dt>
+    <a name = "data"></a>
+    <strong>data</strong>
+    </dt>
+    <dd>
+    A general purpose table that can be used for storing state associated
+ with the buffer.  The <code>data</code> table is special in the way that it will
+ automatically be cleared whenever the user closes the buffer.
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "target"></a>
+    <strong>target</strong>
+    </dt>
+    <dd>
+    The target buffer, if any. 
+ This holds a reference to the target buffer, when present.
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.1</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

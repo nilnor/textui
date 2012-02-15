@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>TextUI docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>TextUI</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/_M.textui.html">_M.textui</a></li>
+  <li><a href="../modules/_M.textui.buffer.html">_M.textui.buffer</a></li>
+  <li><a href="../modules/_M.textui.list.html">_M.textui.list</a></li>
+  <li><a href="../modules/_M.textui.style.html">_M.textui.style</a></li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
+  <li><strong>buffer_actions.lua</strong></li>
+  <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
+  <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
+  <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
+  <li><a href="../examples/styled_list.lua.html">styled_list.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Example <code>buffer_actions.lua</code></h1>
+
+    <pre>
+<span class="comment">--[[--
+Example on various ways to make the buffer interactive, i.e. responding to user
+input. This example illustrates the use of implicit and explicit hotspots using
+either function or table commands, as well as key commands and responding
+directly to key presses.
+
+For the purpose of this example the `F6' key will be set to show the
+example buffer. Provided that TextUI is installed, you can copy this to
+your .textadept/init.lua, and press `F6` to try it out.
+
+@author Nils Nordman &lt;nino at nordman.org&gt;
+@copyright 2012
+@license MIT (see LICENSE)
+]]</span>
+
+<span class="global">require</span> <span class="string">'textadept'</span>
+_M.textui = <span class="global">require</span> <span class="string">'textui'</span>
+
+<span class="keyword">local</span> style = _M.textui.style
+style.action_style = { back = <span class="string">'#6e6e6e'</span>, fore = <span class="string">'#00FFFF'</span> }
+
+<span class="keyword">local</span> <span class="keyword">function</span> on_refresh(buffer)
+  buffer:add_text(<span class="string">'Function command: '</span>)
+  buffer:add_text(<span class="string">'Show modifiers'</span>, style.action_style, <span class="keyword">function</span>(buffer, shift, ctl, alt, meta)
+    <span class="keyword">local</span> modifiers = <span class="string">''</span>
+    <span class="keyword">if</span> shift <span class="keyword">then</span> modifiers = modifiers .. <span class="string">' shift'</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> ctl <span class="keyword">then</span> modifiers = modifiers .. <span class="string">' control'</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> alt <span class="keyword">then</span> modifiers = modifiers .. <span class="string">' alt'</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> meta <span class="keyword">then</span> modifiers = modifiers .. <span class="string">' meta'</span> <span class="keyword">end</span>
+    gui.statusbar_text = <span class="string">"Selected with modifiers: "</span> .. modifiers
+  <span class="keyword">end</span>)
+
+  buffer:add_text(<span class="string">'\nTable command: '</span>)
+  buffer:add_text(<span class="string">'Snapopen user home'</span>, style.action_style,
+                  { _M.textadept.snapopen.open, _USERHOME })
+
+  buffer:add_text(<span class="string">'\n\nExplicit hotspot: '</span>)
+  <span class="keyword">local</span> start_pos = buffer.current_pos
+  buffer:add_text(<span class="string">'Click here somewhere\nto select a theme'</span>, style.action_style)
+  buffer:add_hotspot(start_pos, buffer.current_pos, gui.select_theme)
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> <span class="keyword">function</span> on_keypress(buffer, key, code, shift, ctl, alt, meta)
+  <span class="comment">-- print all lowercase characters to the statusbar
+</span>  <span class="keyword">if</span> key <span class="keyword">and</span> <span class="global">string</span>.match(key, <span class="string">'^[a-z]$'</span>) <span class="keyword">then</span>
+    gui.statusbar_text = key
+    <span class="keyword">return</span> <span class="keyword">true</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> <span class="keyword">function</span> create_action_buffer()
+  <span class="keyword">local</span> buffer = _M.textui.buffer.new(<span class="string">'Action buffer'</span>)
+  buffer.on_refresh = on_refresh
+  buffer.on_keypress = on_keypress
+
+  <span class="comment">-- bind Control C to 'select command'
+</span>  buffer.keys.cc = _M.textadept.menu.select_command
+
+  buffer:show()
+<span class="keyword">end</span>
+
+keys[<span class="string">'f6'</span>] = create_action_buffer
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.1</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
