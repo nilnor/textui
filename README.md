@@ -23,5 +23,11 @@ Usage
 
 To get started with development using TextUI, head over to the
 [LDoc documentation](http://nilnor.github.com/textui/docs). A good place to start is
-the documentation for the module the
+the documentation for the
 [textui module](http://nilnor.github.com/textui/docs/modules/_M.textui.html) itself.
+
+License
+-------
+
+TextUI is released under the MIT license (please see the
+[LICENSE](https://github.com/nilnor/textui/blob/master/LICENSE) for the full license.
