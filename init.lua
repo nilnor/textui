@@ -1,6 +1,6 @@
 --[[--
 The TextUI module allows you to easily create text based interfaces
-for the [TextAdept](http://code.google.com/p/textadept/) editor.
+for the [Textadept](http://code.google.com/p/textadept/) editor.
 
 It currently consists of 3 major components:
 
@@ -12,7 +12,7 @@ It currently consists of 3 major components:
   text based interface buffer by taking care of the background gruntwork required.
 
 - A @{_M.textui.list} class that provides a versatile and extensible text based
-  item listing for TextAdept, featuring advanced search capabilities and styling.
+  item listing for Textadept, featuring advanced search capabilities and styling.
 
 How to use
 ----------
