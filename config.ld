@@ -7,7 +7,7 @@ style = true
 file = { 'buffer.lua', 'style.lua', 'init.lua', 'list.lua' }
 
 description = [[
-A library for creating text based interfaces for TextAdept.
+A library for creating text based interfaces for Textadept.
 ]]
 
 alias("p","param")
