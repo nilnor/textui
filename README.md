@@ -1,8 +1,8 @@
-# TextUI - a module for easily creating text based interfaces for TextAdept
+# TextUI - a module for easily creating text based interfaces for Textadept
 
 ## What is it?
 
-TextUI is a module for the [TextAdept Editor](http://code.google.com/p/textadept/)
+TextUI is a module for the [Textadept Editor](http://code.google.com/p/textadept/)
 that allows you to easily create custom text based interfaces. It enables you to
 create text based interfaces using custom, non-lexer based, styling, and offers
 an easy way of responding to user input.
