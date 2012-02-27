@@ -2,10 +2,13 @@
 The TextUI module allows you to easily create text based interfaces
 for the [Textadept](http://code.google.com/p/textadept/) editor.
 
-It currently consists of 3 major components:
+It currently consists of 4 components:
 
 - A @{_M.textui.style} module that let's you easily define custom styles, as
   well as leveraging the default styles already provided by the user's theme.
+
+  - A @{_M.textui.indicator} module that provides a convenient way of using
+  indicators in your buffers.
 
 - A @{_M.textui.buffer} class that supports custom styling, buffer specific
   key bindings, hotspot support and generally makes it easy to create a
@@ -40,6 +43,7 @@ local M = {
   buffer = require 'textui.buffer',
   style = require 'textui.style',
   list = require 'textui.list',
+  indicator = require 'textui.indicator',
 }
 
 return M
