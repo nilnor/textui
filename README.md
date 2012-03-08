@@ -38,3 +38,18 @@ not be an option I'll gladly accept patches through other means as well.
 If you have any bug reports or feature requests, please submit these to the
 [Github issue tracker](https://github.com/nilnor/textui/issues). As with
 patches, I'll be happy to recieve these through other means as well.
+
+## Release history
+
+### 0.2 (2012-03-08)
+
+- Added support for indicators
+- Improved auto-loading of not-shown list items
+- Added highlighting of list matches
+- Added mouse support for buffer hotspots
+- Font names are now included for default styles
+- List selection callbacks now receive modifiers as well
+
+### 0.1 (2012-02-20)
+
+First public release.
