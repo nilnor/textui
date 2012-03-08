@@ -80,7 +80,7 @@ time (due to it being closed by a user for example) a TextUI buffer is persisten
 
 <p>When we say that a TextUI buffer "wraps" an Textadept buffer, there's more to it
 than just adding additional methods to the Textadept buffer class. A TextUI
-buffer will always exist, but the corresponding Textadept buffer, named <a href="../modules/_M.textui.buffer.html#target">target</a> 
+buffer will always exist, but the corresponding Textadept buffer, named <code>target</code>
 hereafter, may not. When the target buffer exists, a TextUI buffer will
 expose all the functions and attributes of the Textadept buffer, making it
 possible to use the TextUI buffer in just the same way as you would a Textadept
@@ -393,7 +393,7 @@ either a function or a table. When the command is a function, it will be passed
 the following parameters:</p>
 
 <ul>
-    <li><a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> : The buffer instance</li>
+    <li><code>buffer</code>: The buffer instance</li>
     <li><code>shift</code>: True if the Shift key was held down.</li>
     <li><code>ctrl</code>: True if the Control/Command key was held down.</li>
     <li><code>alt</code>: True if the Alt/option key was held down.</li>
@@ -520,7 +520,7 @@ state afterwards.
     </dt>
     <dd>
     Callback invoked whenever the target buffer is deleted. 
- The callback has the following with the following parameters: <a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> 
+ The callback has the following with the following parameters: <code>buffer</code>
 
 
 
@@ -558,7 +558,7 @@ the keypress, that key command will be invoked and this callback will never
 be called. The callback will receive the following parameters:</p>
 
 <ul>
-    <li><a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> : The buffer instance.</li>
+    <li><code>buffer</code>: The buffer instance.</li>
     <li><code>key</code>: The "translated key" (same format as for <a href="../modules/_M.textui.buffer.html#keys">keys</a>).</li>
     <li><code>code</code>: The key code.</li>
     <li><code>shift</code>: True if the Shift key was held down.</li>
@@ -624,7 +624,7 @@ callback, so any such callback will never be called if a key command matches.
     </dt>
     <dd>
     A general purpose table that can be used for storing state associated
- with the buffer.  The <a href="../modules/_M.textui.buffer.html#data">data</a>  table is special in the way that it will
+ with the buffer.  The <code>data</code> table is special in the way that it will
  automatically be cleared whenever the user closes the buffer.
 
 
