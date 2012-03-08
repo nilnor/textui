@@ -42,9 +42,9 @@
 </ul>
 <h2>Examples</h2>
 <ul>
-  <li><strong>basic_list.lua</strong></li>
+  <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
   <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
-  <li><a href="../examples/buffer_indicators.lua.html">buffer_indicators.lua</a></li>
+  <li><strong>buffer_indicators.lua</strong></li>
   <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
   <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
   <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
@@ -55,11 +55,12 @@
 
 <div id="content">
 
-<h1>Example <code>basic_list.lua</code></h1>
+<h1>Example <code>buffer_indicators.lua</code></h1>
 
     <pre>
 <span class="comment">--[[--
-Very basic example on how to use the list class.
+Example on how to use indicators with a TextUI buffer. This example shows
+how to define custom indicators and apply them for selected text.
 
 For the purpose of this example the `F6' key will be set to show the
 example buffer. Provided that TextUI is installed, you can copy this to
@@ -73,21 +74,29 @@ your .textadept/init.lua, and press `F6` to try it out.
 <span class="global">require</span> <span class="string">'textadept'</span>
 _M.textui = <span class="global">require</span> <span class="string">'textui'</span>
 
-<span class="keyword">local</span> <span class="keyword">function</span> show_simple_list()
-  <span class="comment">-- create the list
-</span>  <span class="keyword">local</span> list = _M.textui.list.new(
-    <span class="string">'Simple list'</span>, <span class="comment">-- list title
-</span>    { <span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span> }, <span class="comment">-- list items
-</span>    <span class="keyword">function</span> (list, item) <span class="comment">-- on selection callback
-</span>      gui.statusbar_text = <span class="string">'You selected '</span> .. item
-    <span class="keyword">end</span>
-  )
+<span class="keyword">local</span> c = _SCINTILLA.constants
+<span class="keyword">local</span> indicator = _M.textui.indicator
 
-  <span class="comment">-- and show the list
-</span>  list:show()
+<span class="keyword">local</span> indic_red_box = { style = c.INDIC_BOX, fore = <span class="string">'#ff0000'</span> }
+<span class="keyword">local</span> indic_blue_fill = { style = c.INDIC_ROUNDBOX, fore = <span class="string">'#0000ff'</span> }
+
+<span class="keyword">local</span> <span class="keyword">function</span> on_refresh(buffer)
+  buffer:add_text(<span class="string">'Indicators:\n\n'</span>)
+
+  <span class="keyword">local</span> start_pos = buffer.current_pos
+  buffer:add_text(<span class="string">'Text for manual red box indicator\n\n'</span>)
+  indicator.apply(indic_red_box, start_pos, buffer.current_pos - start_pos)
+
+  buffer:add_text(<span class="string">'Text for buffer inserted blue indicator\n'</span>, <span class="keyword">nil</span>, <span class="keyword">nil</span>, indic_blue_fill)
 <span class="keyword">end</span>
 
-keys[<span class="string">'f6'</span>] = show_simple_list
+<span class="keyword">local</span> <span class="keyword">function</span> create_indicator_buffer()
+  <span class="keyword">local</span> buffer = _M.textui.buffer.new(<span class="string">'Indicator buffer'</span>)
+  buffer.on_refresh = on_refresh
+  buffer:show()
+<span class="keyword">end</span>
+
+keys[<span class="string">'f6'</span>] = create_indicator_buffer
 
 
 </div> <!-- id="content" -->

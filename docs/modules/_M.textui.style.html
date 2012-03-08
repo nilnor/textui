@@ -40,6 +40,7 @@
 <ul>
   <li><a href="../modules/_M.textui.html">_M.textui</a></li>
   <li><a href="../modules/_M.textui.buffer.html">_M.textui.buffer</a></li>
+  <li><a href="../modules/_M.textui.indicator.html">_M.textui.indicator</a></li>
   <li><a href="../modules/_M.textui.list.html">_M.textui.list</a></li>
   <li><strong>_M.textui.style</strong></li>
 </ul>
@@ -47,6 +48,7 @@
 <ul>
   <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
   <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
+  <li><a href="../examples/buffer_indicators.lua.html">buffer_indicators.lua</a></li>
   <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
   <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
   <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
@@ -107,15 +109,13 @@ available are these:</p>
 <h2>What's a style?</h2>
 
 <p>TextUI styling has been made to resemble the lexer based style creation.
-A style is thus just a table with certain properties, exactly the same as
+A style is thus just a table with certain properties, almost exactly the same as
 for style created for a lexer or theme. Please see the documentation for
 <a href="http://caladbolg.net/luadoc/textadept/modules/lexer.html#style">lexer.style</a>
-for information about the fields.</p>
-
-<p>This is what you use to create custom styles (see below), and also what you
-get when accessing any already existing styles. The one exception to note is
-that the <code>font</code> field is unfortunately not available for any of the default
-fields, as that information is not available through Scintilla.</p>
+for information about the fields. The one exception compared to lexer styles
+is that colors are specified using the standard <code>'#rrggbb'</code> notation instead of
+the lexer styles' <code>bgr</code> notation. This is what you use to create custom styles
+(see below), and also what you get when accessing any already existing styles.</p>
 
 <h2>Defining styles</h2>
 

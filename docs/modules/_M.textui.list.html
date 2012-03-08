@@ -42,6 +42,7 @@
 <ul>
   <li><a href="../modules/_M.textui.html">_M.textui</a></li>
   <li><a href="../modules/_M.textui.buffer.html">_M.textui.buffer</a></li>
+  <li><a href="../modules/_M.textui.indicator.html">_M.textui.indicator</a></li>
   <li><strong>_M.textui.list</strong></li>
   <li><a href="../modules/_M.textui.style.html">_M.textui.style</a></li>
 </ul>
@@ -49,6 +50,7 @@
 <ul>
   <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
   <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
+  <li><a href="../examples/buffer_indicators.lua.html">buffer_indicators.lua</a></li>
   <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
   <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
   <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
@@ -63,7 +65,7 @@
 
 <p>The list class provides a versatile and extensible text based item listing for
 Textadept, featuring advanced search capabilities and styling.</p>
-<p> It's a convinient
+<p> It's a convenient
 way of presenting lists to the user for simple selection, but is equally well
 suited for creating advanced list based interfaces.</p>
 
@@ -122,12 +124,12 @@ suited for creating advanced list based interfaces.</p>
 	<td class="summary">The default style to use for diplaying headers.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#column_styles">column_styles</a></td>
-	<td class="summary">The default styles to use for different columns.</td>
+	<td class="name" nowrap><a href="#match_highlight_style">match_highlight_style</a></td>
+	<td class="summary">The style to use for indicating matches.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#max_shown_items">max_shown_items</a></td>
-	<td class="summary">The maximum numbers of items to display in the list.</td>
+	<td class="name" nowrap><a href="#column_styles">column_styles</a></td>
+	<td class="summary">The default styles to use for different columns.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#search_case_insensitive">search_case_insensitive</a></td>
@@ -155,7 +157,7 @@ suited for creating advanced list based interfaces.</p>
 	<tr>
 	<td class="name" nowrap><a href="#on_new_selection">on_new_selection</a></td>
 	<td class="summary">The handler/callback to call when the user has typed in text which doesn't
- match any item, and presses <enter>.</td>
+match any item, and presses <code>&lt;enter&gt;</code>.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#buffer">buffer</a></td>
@@ -290,6 +292,21 @@ this can be specified later using the <a href="../modules/_M.textui.list.html#on
 
 </dd>
     <dt>
+    <a name = "match_highlight_style"></a>
+    <strong>match_highlight_style</strong>
+    </dt>
+    <dd>
+    The style to use for indicating matches. 
+ You can turn off highlighing of matches by setting this to nil.
+ It's possible to override this for a specific list by assigning another value
+ to the instance itself. The default value is <code>style.default</code>.
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "column_styles"></a>
     <strong>column_styles</strong>
     </dt>
@@ -300,31 +317,6 @@ this can be specified later using the <a href="../modules/_M.textui.list.html#on
  In the latter case, the function will be invoked with the corresponding
  item and column index. The default styles contains styles for up to three
  columns, after which the default style will be used.
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "max_shown_items"></a>
-    <strong>max_shown_items</strong>
-    </dt>
-    <dd>
-    The maximum numbers of items to display in the list. 
- The default value is <code>nil</code>, in which case the list will show only as many
- items as can be shown in the view. When there are more items than can be
- shown. this will be indicated visually at the end of the list. The user can
- then chose to show more interactively.</p>
-
-<p> Please be aware that this is perhaps the biggest factor when it comes to
- list performance, and that setting this to any large value will significantly
- slow things down. It might be prudent to override this in case you know that
- a specific type of list typically always contains less than, say 200 items or
- so, but in the general case it's best left untouched.</p>
-
-<p> It's possible to override this for a specific list by assigning another value
- to the instance itself.
 
 
 
@@ -398,11 +390,15 @@ this can be specified later using the <a href="../modules/_M.textui.list.html#on
     <dd>
     
 <p>The handler/callback to call when the user has selected an item. 
- The handler will be passed the following parameters:</p>
+The handler will be passed the following parameters:</p>
 
 <ul>
-    <li><code>list</code>: the list itself</li>
+    <li><a href="../modules/_M.textui.list.html#_M.textui.list">list</a> : the list itself</li>
     <li><code>item</code>: the item selected</li>
+    <li><code>shift</code>: True if the Shift key was held down.</li>
+    <li><code>ctrl</code>: True if the Control/Command key was held down.</li>
+    <li><code>alt</code>: True if the Alt/option key was held down.</li>
+    <li><code>meta</code>: True if the Control key on Mac OSX was held down.</li>
 </ul>
 
 
@@ -418,12 +414,17 @@ this can be specified later using the <a href="../modules/_M.textui.list.html#on
     <dd>
     
 <p>The handler/callback to call when the user has typed in text which doesn't
- match any item, and presses <enter>.  The handler will be passed the following
- parameters:</p>
+match any item, and presses <code>&lt;enter&gt;</code>. </p>
+
+<p>The handler will be passed the following parameters:</p>
 
 <ul>
-    <li><code>list</code>: the list itself</li>
+    <li><a href="../modules/_M.textui.list.html#_M.textui.list">list</a> : the list itself</li>
     <li><code>search</code>: the current search of the list</li>
+    <li><code>shift</code>: True if the Shift key was held down.</li>
+    <li><code>ctrl</code>: True if the Control/Command key was held down.</li>
+    <li><code>alt</code>: True if the Alt/option key was held down.</li>
+    <li><code>meta</code>: True if the Control key on Mac OSX was held down.</li>
 </ul>
 
 
@@ -487,7 +488,7 @@ this can be specified later using the <a href="../modules/_M.textui.list.html#on
     </dt>
     <dd>
     A general purpose table that can be used for storing state associated
- with the list.  Just like <a href="../modules/_M.textui.buffer.html#data">_M.textui.buffer.data</a>, the <code>data</code> table is
+ with the list.  Just like <a href="../modules/_M.textui.buffer.html#data">_M.textui.buffer.data</a>, the <a href="../modules/_M.textui.list.html#data">data</a>  table is
  special in the way that it will automatically be cleared whenever the user
  closes the buffer associated with the list.
 

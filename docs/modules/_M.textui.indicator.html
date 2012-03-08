@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>TextUI docs</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>TextUI</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul>
+  <li><a href="../modules/_M.textui.html">_M.textui</a></li>
+  <li><a href="../modules/_M.textui.buffer.html">_M.textui.buffer</a></li>
+  <li><strong>_M.textui.indicator</strong></li>
+  <li><a href="../modules/_M.textui.list.html">_M.textui.list</a></li>
+  <li><a href="../modules/_M.textui.style.html">_M.textui.style</a></li>
+</ul>
+<h2>Examples</h2>
+<ul>
+  <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
+  <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
+  <li><a href="../examples/buffer_indicators.lua.html">buffer_indicators.lua</a></li>
+  <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
+  <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
+  <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
+  <li><a href="../examples/styled_list.lua.html">styled_list.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>_M.textui.indicator</code></h1>
+
+<p>The indicator module provides support for indicators in your buffers.</p>
+<p>Indicators lets you visually mark a certain text range using various styles and
+colors, and using the event mechanism you can also receive events whenever the
+user clicks the marked text.</p>
+
+<h2>The indicator definition</h2>
+
+<p>An indicator is defined using a simple table with the properties listed below.
+For the most part, these properties maps directly to fields in the
+<a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html">buffer</a> class. The
+list below will give short descriptions and refer to the corresponding field in
+the buffer class where applicable.</p>
+
+<ul>
+    <li><a href="../modules/_M.textui.indicator.html#_M.textui.style">style</a> : The style of the indicator. See <code>indic_style</code>.</li>
+    <li><code>alpha</code>: Alpha transparency value from 0 to 255 (or 256 for no alpha), used
+    for fill colors of rectangles . See <code>indic_alpha</code>.</li>
+    <li><code>outline_alpha</code>: Alpha transparency value from 0 to 255 (or 256 for no alpha),
+    used for outline colors of rectangles . See <code>indic_outline_alpha</code>.</li>
+    <li><code>fore</code>: The foreground color of the indicator. The color should be specified
+    in the <code>'#rrggbb'</code> notation.</li>
+    <li><code>under</code>: Whether an indicator is drawn under text or over (default). Drawing
+    under text works only when two phase drawing is enabled for the buffer (the
+    default).</li>
+</ul>
+
+<h2>Using indicators</h2>
+
+<p>Start with defining your indicators using the format described above. You can
+then  either apply them against a range of text using <a href="../modules/_M.textui.indicator.html#apply">apply</a>, or pass them to
+one of the text insertion functions in <a href="../modules/_M.textui.buffer.html#">_M.textui.buffer</a>. If you need to get
+the defined indicator number for an indicator, you can retrieve it using
+<a href="../modules/_M.textui.indicator.html#number_for">number_for</a>. Please note that indicator numbers are not necessarily stable
+between buffer switches, so problems may arise if you hold on to an indicator
+number.</p>
+
+<p>Please see the example <a href="../examples/buffer_indicators.lua.html#">buffer_indicators.lua</a> for some practical usage.</p>
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#define_indicators">define_indicators&nbsp;()</a></td>
+	<td class="summary">Defines the currently used custom indicators for the current buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#number_for">number_for&nbsp;(indicator)</a></td>
+	<td class="summary">Retrieves the indicator number used in the current buffer for the indicator.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#apply">apply&nbsp;(indicator, position, length)</a></td>
+	<td class="summary">Applies the given indicator for the text range specified in the current
+ buffer.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2><a name="Functions"></a>Functions</h2>
+    
+    <dl class="function">
+    <dt>
+    <a name = "define_indicators"></a>
+    <strong>define_indicators&nbsp;()</strong>
+    </dt>
+    <dd>
+    Defines the currently used custom indicators for the current buffer. 
+ This must be called whenever a buffer with custom indicators is switched to.
+ This is automatically done by the <a href="../modules/_M.textui.buffer.html#">_M.textui.buffer</a> class, and thus
+ not something you typically have to worry about.
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "number_for"></a>
+    <strong>number_for&nbsp;(indicator)</strong>
+    </dt>
+    <dd>
+    Retrieves the indicator number used in the current buffer for the indicator. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>indicator</em></code>:  The indicator to retrieve the number for</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "apply"></a>
+    <strong>apply&nbsp;(indicator, position, length)</strong>
+    </dt>
+    <dd>
+    Applies the given indicator for the text range specified in the current
+ buffer. 
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>indicator</em></code>:  The indicator to apply</li>
+       <li><code><em>position</em></code>:  The start position</li>
+       <li><code><em>length</em></code>:  The length of the range to fill</li>
+    </ul>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.1</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

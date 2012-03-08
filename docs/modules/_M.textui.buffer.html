@@ -42,6 +42,7 @@
 <ul>
   <li><a href="../modules/_M.textui.html">_M.textui</a></li>
   <li><strong>_M.textui.buffer</strong></li>
+  <li><a href="../modules/_M.textui.indicator.html">_M.textui.indicator</a></li>
   <li><a href="../modules/_M.textui.list.html">_M.textui.list</a></li>
   <li><a href="../modules/_M.textui.style.html">_M.textui.style</a></li>
 </ul>
@@ -49,6 +50,7 @@
 <ul>
   <li><a href="../examples/basic_list.lua.html">basic_list.lua</a></li>
   <li><a href="../examples/buffer_actions.lua.html">buffer_actions.lua</a></li>
+  <li><a href="../examples/buffer_indicators.lua.html">buffer_indicators.lua</a></li>
   <li><a href="../examples/buffer_styling.lua.html">buffer_styling.lua</a></li>
   <li><a href="../examples/list_commands.lua.html">list_commands.lua</a></li>
   <li><a href="../examples/multi_column_list.lua.html">multi_column_list.lua</a></li>
@@ -78,7 +80,7 @@ time (due to it being closed by a user for example) a TextUI buffer is persisten
 
 <p>When we say that a TextUI buffer "wraps" an Textadept buffer, there's more to it
 than just adding additional methods to the Textadept buffer class. A TextUI
-buffer will always exist, but the corresponding Textadept buffer, named <code>target</code>
+buffer will always exist, but the corresponding Textadept buffer, named <a href="../modules/_M.textui.buffer.html#target">target</a> 
 hereafter, may not. When the target buffer exists, a TextUI buffer will
 expose all the functions and attributes of the Textadept buffer, making it
 possible to use the TextUI buffer in just the same way as you would a Textadept
@@ -126,11 +128,15 @@ provided callbacks.</p>
 	<td class="summary">Closes the buffer.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#buffer:update">buffer:update&nbsp;(callback)</a></td>
+	<td class="summary">Performs an update of the buffer contents.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#buffer:refresh">buffer:refresh&nbsp;()</a></td>
 	<td class="summary">Refreshes the buffer.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#buffer:set_title">buffer:set_title&nbsp;(title)</a></td>
+	<td class="name" nowrap><a href="#buffer:set_title">buffer:set_title&nbsp;()</a></td>
 	<td class="summary">Updates the title of the buffer.</td>
 	</tr>
 	<tr>
@@ -150,22 +156,22 @@ provided callbacks.</p>
 	<td class="summary">Adds a hotspot for the given text range.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#buffer:add_text">buffer:add_text&nbsp;(text, style, command)</a></td>
+	<td class="name" nowrap><a href="#buffer:add_text">buffer:add_text&nbsp;(text, style, command, indicator)</a></td>
 	<td class="summary">Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.add_text">buffer:add_text</a>
-which accepts optional style and command parameters.</td>
+which accepts optional style, command and indicator parameters.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#buffer:append_text">buffer:append_text&nbsp;(text, style, command)</a></td>
+	<td class="name" nowrap><a href="#buffer:append_text">buffer:append_text&nbsp;(text, style, command, indicator)</a></td>
 	<td class="summary">Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.append_text">buffer:append_text</a>
-which accepts optional style and command parameters.</td>
+which accepts optional style, command and indicator parameters.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#buffer:insert_text">buffer:insert_text&nbsp;(pos, text, style, command)</a></td>
+	<td class="name" nowrap><a href="#buffer:insert_text">buffer:insert_text&nbsp;(pos, text, style, command, indicator)</a></td>
 	<td class="summary">Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.insert_text">buffer:insert_text</a>
-which accepts optional style and command parameters.</td>
+which accepts optional style, command and indicator parameters.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#buffer:newline">buffer:newline&nbsp;()</a></td>
@@ -239,10 +245,10 @@ which accepts optional style and command parameters.</td>
     <strong>buffer:show&nbsp;()</strong>
     </dt>
     <dd>
-    Shows the buffer.  If the target buffer doesn't exist, due to
- it either not having been created yet or it having been deleted,
- it is automatically created. Upon the return, the buffer is showing
- and set as the global buffer.
+    Shows the buffer. 
+ If the target buffer doesn't exist, due to it either not having been created
+ yet or it having been deleted, it is automatically created. Upon the return,
+ the buffer is showing and set as the global buffer.
 
 
 
@@ -262,14 +268,39 @@ which accepts optional style and command parameters.</td>
 
 </dd>
     <dt>
+    <a name = "buffer:update"></a>
+    <strong>buffer:update&nbsp;(callback)</strong>
+    </dt>
+    <dd>
+    Performs an update of the buffer contents. 
+You invoke this with a callback that will do the actual update. This function
+takes care of ensuring that the target is writable, and handles setting the
+save point, etc.
+
+    <h3>Parameters:</h3>
+    <ul>
+       <li><code><em>callback</em></code>:  The callback to invoke to perform the update. The callback
+will receive the buffer instance as its sole parameter.</li>
+    </ul>
+
+
+
+
+</dd>
+    <dt>
     <a name = "buffer:refresh"></a>
     <strong>buffer:refresh&nbsp;()</strong>
     </dt>
     <dd>
-    Refreshes the buffer.  A refresh works by ensuring that it's
- possible to write to the buffer and invoking the <a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler.
- After the refresh is complete, the <a href="../modules/_M.textui.buffer.html#read_only">read_only</a> state is reset to
- whatever it was before the refresh, and a save point is set.
+    Refreshes the buffer. 
+A refresh works by ensuring that it's possible to write to the buffer and
+invoking the <a href="../modules/_M.textui.buffer.html#on_refresh">on_refresh</a> handler. After the refresh is complete, the
+<a href="../modules/_M.textui.buffer.html#read_only">read_only</a> state is reset to whatever it was before the refresh, and a save
+point is set.</p>
+
+<p>Please note that a refresh will clear all content, along with hotspots, etc.
+If you want to perform smaller updates please use the <a href="../modules/_M.textui.buffer.html#buffer:update">buffer:update</a> function
+instead.
 
 
 
@@ -278,17 +309,11 @@ which accepts optional style and command parameters.</td>
 </dd>
     <dt>
     <a name = "buffer:set_title"></a>
-    <strong>buffer:set_title&nbsp;(title)</strong>
+    <strong>buffer:set_title&nbsp;()</strong>
     </dt>
     <dd>
     Updates the title of the buffer. 
 
-    <h3>Parameters:</h3>
-    <ul>
-       <li><code><em>title</em></code>: 
-
-</li>
-    </ul>
 
 
 
@@ -368,11 +393,11 @@ either a function or a table. When the command is a function, it will be passed
 the following parameters:</p>
 
 <ul>
-    <li>buffer: The buffer instance</li>
-    <li>shift: True if the Shift key was held down.</li>
-    <li>ctrl: True if the Control/Command key was held down.</li>
-    <li>alt: True if the Alt/option key was held down.</li>
-    <li>meta: True if the Control key on Mac OSX was held down.</li>
+    <li><a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> : The buffer instance</li>
+    <li><code>shift</code>: True if the Shift key was held down.</li>
+    <li><code>ctrl</code>: True if the Control/Command key was held down.</li>
+    <li><code>alt</code>: True if the Alt/option key was held down.</li>
+    <li><code>meta</code>: True if the Control key on Mac OSX was held down.</li>
 </ul>
 </li>
     </ul>
@@ -383,12 +408,12 @@ the following parameters:</p>
 </dd>
     <dt>
     <a name = "buffer:add_text"></a>
-    <strong>buffer:add_text&nbsp;(text, style, command)</strong>
+    <strong>buffer:add_text&nbsp;(text, style, command, indicator)</strong>
     </dt>
     <dd>
     Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.add_text">buffer:add_text</a>
-which accepts optional style and command parameters. 
+which accepts optional style, command and indicator parameters. 
 
     <h3>Parameters:</h3>
     <ul>
@@ -396,6 +421,7 @@ which accepts optional style and command parameters.
        <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
        <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
 <a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+       <li><code><em>indicator</em></code>:  Optional <a href="../modules/_M.textui.indicator.html#">_M.textui.indicator</a> to use for the added text.</li>
     </ul>
 
 
@@ -404,12 +430,12 @@ which accepts optional style and command parameters.
 </dd>
     <dt>
     <a name = "buffer:append_text"></a>
-    <strong>buffer:append_text&nbsp;(text, style, command)</strong>
+    <strong>buffer:append_text&nbsp;(text, style, command, indicator)</strong>
     </dt>
     <dd>
     Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.append_text">buffer:append_text</a>
-which accepts optional style and command parameters. 
+which accepts optional style, command and indicator parameters. 
 
     <h3>Parameters:</h3>
     <ul>
@@ -417,6 +443,7 @@ which accepts optional style and command parameters.
        <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
        <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
 <a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+       <li><code><em>indicator</em></code>:  Optional <a href="../modules/_M.textui.indicator.html#">_M.textui.indicator</a> to use for the appended text.</li>
     </ul>
 
 
@@ -425,12 +452,12 @@ which accepts optional style and command parameters.
 </dd>
     <dt>
     <a name = "buffer:insert_text"></a>
-    <strong>buffer:insert_text&nbsp;(pos, text, style, command)</strong>
+    <strong>buffer:insert_text&nbsp;(pos, text, style, command, indicator)</strong>
     </dt>
     <dd>
     Override for
 <a href="http://caladbolg.net/luadoc/textadept/modules/buffer.html#buffer.insert_text">buffer:insert_text</a>
-which accepts optional style and command parameters. 
+which accepts optional style, command and indicator parameters. 
 
     <h3>Parameters:</h3>
     <ul>
@@ -439,6 +466,7 @@ which accepts optional style and command parameters.
        <li><code><em>style</em></code>:  The style to use for the text, as defined using <a href="../modules/_M.textui.style.html#">_M.textui.style</a>.</li>
        <li><code><em>command</em></code>:  The command to run if the user "selects" this text. See
 <a href="../modules/_M.textui.buffer.html#buffer:add_hotspot">buffer:add_hotspot</a> for more information.</li>
+       <li><code><em>indicator</em></code>:  Optional <a href="../modules/_M.textui.indicator.html#">_M.textui.indicator</a> to use for the inserted text.</li>
     </ul>
 
 
@@ -492,7 +520,7 @@ state afterwards.
     </dt>
     <dd>
     Callback invoked whenever the target buffer is deleted. 
- The callback has the following with the following parameters: <code>buffer</code>
+ The callback has the following with the following parameters: <a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> 
 
 
 
@@ -527,11 +555,20 @@ The callback will be invoked with the buffer as the sole parameter.
     Callback invoked whenever the buffer receives a keypress. 
 Please note that if there is any key command defined in <a href="../modules/_M.textui.buffer.html#keys">keys</a> matching
 the keypress, that key command will be invoked and this callback will never
-be called. The callback will receive as its first two parameters the buffer
-object and the "translated key" (same format as for <a href="../modules/_M.textui.buffer.html#keys">keys</a>), and will in
-addition after that receive all the parameters from the the standard Textadept
-KEYPRESS event (which you can read more about
-<a href="http://caladbolg.net/luadoc/textadept/modules/events.html">here</a>).
+be called. The callback will receive the following parameters:</p>
+
+<ul>
+    <li><a href="../modules/_M.textui.buffer.html#_M.textui.buffer">buffer</a> : The buffer instance.</li>
+    <li><code>key</code>: The "translated key" (same format as for <a href="../modules/_M.textui.buffer.html#keys">keys</a>).</li>
+    <li><code>code</code>: The key code.</li>
+    <li><code>shift</code>: True if the Shift key was held down.</li>
+    <li><code>ctrl</code>: True if the Control/Command key was held down.</li>
+    <li><code>alt</code>: True if the Alt/option key was held down.</li>
+    <li><code>meta</code>: True if the Control key on Mac OSX was held down.</li>
+</ul>
+
+<p>It's similar to the standard Textadept KEYPRESS event (which you can read more
+about <a href="http://caladbolg.net/luadoc/textadept/modules/events.html">here</a>).
 The return value determines whether the key press should be propagated, just
 the same as for the standard Textadept event.
 
@@ -587,7 +624,7 @@ callback, so any such callback will never be called if a key command matches.
     </dt>
     <dd>
     A general purpose table that can be used for storing state associated
- with the buffer.  The <code>data</code> table is special in the way that it will
+ with the buffer.  The <a href="../modules/_M.textui.buffer.html#data">data</a>  table is special in the way that it will
  automatically be cleared whenever the user closes the buffer.
 
 
