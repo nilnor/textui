@@ -4,6 +4,7 @@ project = 'TextUI'
 format = 'markdown'
 examples = { 'examples' }
 style = true
+template = false
 file = { 'buffer.lua', 'style.lua', 'init.lua', 'list.lua', 'indicator.lua' }
 
 description = [[
